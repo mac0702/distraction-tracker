@@ -38,9 +38,11 @@ export async function POST(req: Request) {
         email: user.email,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
-      { error: error.message || "Something went wrong" },
+      {
+        error: error instanceof Error ? error.message : "Something went wrong",
+      },
       { status: 500 }
     );
   }

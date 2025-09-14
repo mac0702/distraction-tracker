@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 import { MongoClient } from "mongodb";
 
+interface CachedMongoose {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
 declare global {
-  var mongoose: any;
+  var mongoose: CachedMongoose;
   var mongoClientPromise: Promise<MongoClient> | null;
 }
 

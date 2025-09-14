@@ -18,9 +18,11 @@ export async function POST(req: Request) {
       userId: (session.user as { id: string }).id,
     });
     return NextResponse.json(event);
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
-      { error: error.message || "Something went wrong" },
+      {
+        error: error instanceof Error ? error.message : "Something went wrong",
+      },
       { status: 500 }
     );
   }
@@ -38,7 +40,18 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    let query: any = { userId: (session.user as { id: string }).id };
+    interface QueryType {
+      userId: string;
+      timestamp?: {
+        $gte: number;
+        $lte: number;
+      };
+    }
+
+    const query: {
+      userId: string;
+      timestamp?: { $gte: number; $lte: number };
+    } = { userId: (session.user as { id: string }).id };
     if (startDate && endDate) {
       query.timestamp = {
         $gte: parseInt(startDate),
@@ -51,9 +64,11 @@ export async function GET(req: Request) {
       .limit(100);
 
     return NextResponse.json(events);
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
-      { error: error.message || "Something went wrong" },
+      {
+        error: error instanceof Error ? error.message : "Something went wrong",
+      },
       { status: 500 }
     );
   }

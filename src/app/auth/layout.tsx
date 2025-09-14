@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeProvider } from "next-themes";
 import Image from "next/image";
 
 export default function AuthLayout({

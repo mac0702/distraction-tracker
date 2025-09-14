@@ -10,7 +10,7 @@ if (!process.env.NEXTAUTH_SECRET) {
 }
 
 export const authOptions: AuthOptions = {
-  adapter: MongoDBAdapter(clientPromise) as any,
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -62,7 +62,12 @@ export const authOptions: AuthOptions = {
       return { ...token, ...user };
     },
     async session({ session, token }) {
-      session.user = token as any;
+      session.user = token as {
+        id: string;
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+      };
       return session;
     },
   },
